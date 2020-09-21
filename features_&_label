@@ -1,0 +1,29 @@
+Features:
+
+    'fbx_diff'
+        Type: Integer
+        Defination: Container price on fbx website
+        Input: reference from parameter file that I provide
+
+    'd_quote_search_amount'
+        Type: Integer
+        Defination: Total daily quote search amount
+        Input: reference from parameter file that I provide
+
+    'conversion_rate'
+        Type: Float
+        Defination: Total daily conversion rate
+        Input: reference from parameter file that I provide
+
+    'peak_season'
+        Type: Boolean
+        Defination : 
+            not peak season: JAN ~ JULY
+            peak season: AUG ~ DEC
+        Input: prvide on user side
+Label:
+    'daily_container_quanity' 
+        Type: Float
+    Defination : Total daily container order amount
+
+    

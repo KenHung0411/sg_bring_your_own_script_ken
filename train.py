@@ -7,47 +7,29 @@ import argparse
 import os
 import pandas as pd
 
-## bin the feature of daily_container_quanity to range
-def bin_daily_container_quanity(row):
-    if 0 <= row < 10:
-        return 0
-    if 10 <= row < 20:
-        return 1
-    if 20 <= row < 30:
-        return 2
-    if 30 <= row < 40:
-        return 3
-    if 40 <= row < 50:
-        return 4
-    if 50 <= row < 60:
-        return 5
-    if 60 <= row < 70:
-        return 6
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     # Hyperparameters are described here. In this simple example we are just including one hyperparameter.
     # https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html
-    parser.add_argument('--n_neighbors', type=int, default=5)
+    parser.add_argument('--nneighbors', type=int, default=5)
     parser.add_argument('--weights', type=str, default='uniform')
     parser.add_argument('--algorithm', type=str, default='auto')
     parser.add_argument('--leaf_size', type=int, default=30)
     parser.add_argument('--p', type=int, default=2)
     parser.add_argument('--metric', type=str, default='minkowski')
-    parser.add_argument('--metric_params', type=dict, default=None)
-    parser.add_argument('--n_jobs', type=int, default=None)
+    parser.add_argument('--metricparams', type=dict, default=None)
+    parser.add_argument('--njobs', type=int, default=None)
 
 
     # Sagemaker specific arguments. Defaults are set in the environment variables.
-    parser.add_argument('--output-data-dir', type=str,
-                       default=os.environ['SM_OUTPUT_DATA_DIR'])
     parser.add_argument('--model-dir', type=str,
                         default=os.environ['SM_MODEL_DIR'])
-    parser.add_argument('--train', type=str,
-                        default=os.environ['SM_CHANNEL_TRAIN'])
-
+    
+    parser.add_argument('--train', type=str, 
+                        default=os.environ.get('SM_CHANNEL_TRAINING'))
+    
     """ # Local taining manually
     parser.add_argument('--output-data-dir', type=str,
                         default=os.getcwd())
@@ -71,9 +53,6 @@ if __name__ == '__main__':
     raw_data = [pd.read_csv(file, engine="python")
                 for file in input_files]
     train_data = pd.concat(raw_data)
-
-    train_data['bining_daily_container_quanity'] = train_data['daily_container_quanity'].apply(
-        bin_daily_container_quanity)
     
     organized_columns = ['daily_container_quanity', 'fbx_diff', 'd_quote_search_amount', 'conversion_rate', 'peak_season']
     train_data = train_data[organized_columns]
